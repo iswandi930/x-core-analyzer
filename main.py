@@ -2,34 +2,37 @@ from fastapi import FastAPI, Header, HTTPException
 from typing import Any
 import os
 
-app = FastAPI(title="X-Core Analyzer", version="0.1.0")
+app = FastAPI(title="X-Core Analyzer", version="0.2.0")
 
 WEBHOOK_TOKEN = os.getenv("WEBHOOK_TOKEN", "")
 
 
 def x_core_analysis(payload: dict[str, Any]) -> dict[str, Any]:
-    """Initial analysis shell. No broker/order execution is performed."""
+    """Analysis-only webhook receiver. No broker/order execution."""
     symbol = payload.get("symbol", "UNKNOWN")
     timeframe = payload.get("timeframe", "UNKNOWN")
     price = payload.get("price")
 
+    # For now we only validate/forward incoming TradingView data.
+    # The real X-Core decision engine will be added after the webhook path is verified.
     return {
         "system": "X-Core",
         "mode": "analysis_only",
+        "status": "received",
         "symbol": symbol,
         "timeframe": timeframe,
         "price": price,
-        "direction": "BUY",
+        "direction": None,
         "entry_area": None,
         "correction_reversal_area": None,
         "factors": {
-            "liquidity_sweep": None,
-            "mss_choch": None,
-            "order_block": None,
-            "fvg": None,
-            "fibonacci_0.5_0.618": None,
+            "liquidity_sweep": payload.get("liquidity_sweep"),
+            "mss_choch": payload.get("mss_choch"),
+            "order_block": payload.get("order_block"),
+            "fvg": payload.get("fvg"),
+            "fibonacci_0.5_0.618": payload.get("fibonacci_0.5_0.618"),
         },
-        "note": "Signal engine scaffold; no trade execution.",
+        "note": "Webhook received. X-Core does not execute trades.",
     }
 
 
