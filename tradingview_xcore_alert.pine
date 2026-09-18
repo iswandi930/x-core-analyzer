@@ -1,0 +1,34 @@
+//@version=6
+indicator("X-Core Analysis Webhook", overlay=true)
+
+// Analysis-only: this script NEVER sends orders.
+// It packages the latest OHLC candles for X-Core.
+// Add an alert using: Any alert() function call.
+
+barsToSend = input.int(30, "Candles to send", minval=20, maxval=50)
+
+f_num(float v) =>
+    str.tostring(v, format.mintick)
+
+f_json_candle(int i) =>
+    '{"open":' + f_num(open[i]) +
+    ',"high":' + f_num(high[i]) +
+    ',"low":' + f_num(low[i]) +
+    ',"close":' + f_num(close[i]) +
+    ',"time":' + str.tostring(time[i]) + '}'
+
+if barstate.isconfirmed
+    string candles = "["
+    for i = barsToSend - 1 to 0
+        candles += (i == barsToSend - 1 ? "" : ",") + f_json_candle(i)
+    candles += "]"
+
+    string payload = '{"symbol":"' + syminfo.ticker +
+      '","exchange":"' + syminfo.prefix +
+      '","timeframe":"' + timeframe.period +
+      '","price":' + f_num(close) +
+      ',"time":' + str.tostring(time) +
+      ',"mode":"analysis_only"' +
+      ',"candles":' + candles + '}'
+
+    alert(payload, alert.freq_once_per_bar_close)
