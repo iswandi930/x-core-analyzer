@@ -1,0 +1,24 @@
+{
+  "symbol": "{{ticker}}",
+  "exchange": "{{exchange}}",
+  "timeframe": "{{interval}}",
+  "price": {{close}},
+  "time": "{{time}}",
+  "mode": "analysis_only",
+  "candles": [
+    {"open": 4300.0, "high": 4305.0, "low": 4297.0, "close": 4303.0, "time": 1},
+    {"open": 4303.0, "high": 4308.0, "low": 4301.0, "close": 4307.0, "time": 2},
+    {"open": 4307.0, "high": 4310.0, "low": 4304.0, "close": 4309.0, "time": 3},
+    {"open": 4309.0, "high": 4315.0, "low": 4307.0, "close": 4314.0, "time": 4},
+    {"open": 4314.0, "high": 4318.0, "low": 4311.0, "close": 4317.0, "time": 5}
+  ],
+  "timeframes": {
+    "D1": {"candles": []},
+    "H4": {"candles": []},
+    "H1": {"candles": []},
+    "M30": {"candles": []},
+    "M15": {"candles": []},
+    "M5": {"candles": []},
+    "M1": {"candles": []}
+  }
+}
